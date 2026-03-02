@@ -1,6 +1,6 @@
-# Discord Scrapper
+# Discord Searcher
 
-Discord Scrapper is a project to explore and search messages from Discord users across guilds and channels. It consists of a **backend API** (FastAPI + PostgreSQL) and a **simple frontend** (HTML/JS) for testing.
+Discord Searcher is a project to explore and search messages from Discord users across guilds and channels. It consists of a **backend API** (FastAPI + PostgreSQL) and a **simple frontend** (HTML/JS) for testing.
 
 ![App Preview](assets/preview.gif)
 
