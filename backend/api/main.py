@@ -169,7 +169,7 @@ def get_user_channels(user_id: str, guild_id: str):
 # Endpoint 4 : messages d'un utilisateur dans un channel
 # ----------------------
 @app.get("/user/{user_id}/channel/{channel_id}/messages", response_model=List[Message])
-def get_user_messages(user_id: str, channel_id: str, limit: int = 100):
+def get_user_messages(user_id: str, channel_id: str):
     conn = get_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="Cannot connect to DB")
@@ -180,8 +180,8 @@ def get_user_messages(user_id: str, channel_id: str, limit: int = 100):
                 FROM messages
                 WHERE user_id::text = %s AND channel_id::text = %s
                 ORDER BY sent_at DESC
-                LIMIT %s
-            """, (user_id, channel_id, limit))
+            """, (user_id, channel_id))
+
             rows = cur.fetchall()
 
             return [
