@@ -1,68 +1,40 @@
-function normalizeMessage(message) {
-    const attachmentUrls = [];
-    for (const attachment of message.attachments.values()) {
-        if (attachment && attachment.url) {
-            attachmentUrls.push(attachment.url);
-        }
-    }
+function extractUrls(array, fields = []) {
+    const urls = [];
+    if (!array) return urls;
 
-    const embedUrls = [];
-    for (const embed of message.embeds) {
-        if (embed.image && embed.image.url) {
-            embedUrls.push(embed.image.url);
-        }
+    for (const item of array) {
+        if (!item) continue;
 
-        if (embed.thumbnail && embed.thumbnail.url) {
-            embedUrls.push(embed.thumbnail.url);
-        }
-
-        if (embed.video && embed.video.url) {
-            embedUrls.push(embed.video.url);
-        }
-
-        if (embed.provider && embed.provider.url) {
-            embedUrls.push(embed.provider.url);
-        }
-    }
-
-    const stickerUrls = [];
-    if (message.stickers) {
-        for (const sticker of message.stickers) {
-            if (sticker && sticker.url) {
-                stickerUrls.push(sticker.url);
+        for (const field of fields) {
+            if (item[field] && item[field].url) {
+                urls.push(item[field].url);
             }
         }
     }
+    return urls;
+}
 
-    const allMediaArray = [];
-    for (const url of [...attachmentUrls, ...embedUrls, ...stickerUrls]) {
-        if (url) {
-            allMediaArray.push(url);
-        }
-    }
+function normalizeMessage(message) {
+    const attachmentUrls = [...message.attachments.values()]
+        .map(a => a?.url)
+        .filter(Boolean);
 
-    const allMedia = allMediaArray.join("\n");
+    const embedUrls = extractUrls(message.embeds, ["image", "thumbnail", "video", "provider"]);
+    const stickerUrls = (message.stickers || []).map(s => s?.url).filter(Boolean);
 
-    let guildId = null;
-    if (message.guild) {
-        guildId = message.guild.id;
-    }
+    const allMedia = [...attachmentUrls, ...embedUrls, ...stickerUrls].join("\n");
 
     const contentParts = [];
-    if (message.content) {
-        contentParts.push(message.content);
-    }
-    if (allMedia) {
-        contentParts.push(allMedia);
-    }
+    if (message.content) contentParts.push(message.content);
+    if (allMedia) contentParts.push(allMedia);
 
     return {
         message_id: message.id,
         user_id: message.author.id,
-        guild_id: guildId,
+        guild_id: message.guild?.id ?? null,
         channel_id: message.channel.id,
         content: contentParts.join("\n"),
-        sent_at: message.createdTimestamp
+        sent_at: message.createdTimestamp,
     };
 }
 
