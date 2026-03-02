@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Discord Messages Searcher</title>
+    <!-- clean planet-themed font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Discord Messages Searcher</h1>
+        <div class="search-bar">
+            <label for="userId">discord user id</label>
+            <input type="text" id="userId" placeholder="Entrez l'ID de l'utilisateur">
+            <button id="btnGuilds">Search</button>
+        </div>
+        <div id="loading" class="hidden">Loading...</div>
+    </header>
+
+    <main id="results" class="hidden">
+        <!-- two-column layout -->
+        <div class="results-container">
+            <!-- LEFT: User profile -->
+            <aside id="userProfile" class="user-profile">
+                <div id="userCard" class="user-card hidden">
+                    <div id="userAvatar" class="user-avatar"></div>
+                    <h2 id="userName"></h2>
+                    <p id="userDiscrim" class="user-discrim"></p>
+                    <p id="userId" class="user-id"></p>
+                </div>
+            </aside>
+
+            <!-- RIGHT: Guilds and messages -->
+            <section id="guildSection" class="section">
+                <h3>Guilds:</h3>
+                <div id="guildsList"></div>
+            </section>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

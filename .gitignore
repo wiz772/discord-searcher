@@ -1,0 +1,43 @@
+# ------------------------
+# Fichiers sensibles
+# ------------------------
+# Fichiers de configuration
+**/config.json
+# Fichiers d'environnement
+.env
+
+# ------------------------
+# Node.js
+# ------------------------
+# Node modules
+**/node_modules/
+# Lock files si tu veux pas les suivre (optionnel)
+# package-lock.json
+# yarn.lock
+
+# ------------------------
+# Python
+# ------------------------
+# Environnements virtuels
+**/venv/
+# Fichiers compilés
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+# Distribution / build
+build/
+dist/
+*.egg-info/
+
+# ------------------------
+# Systèmes / IDE
+# ------------------------
+# Mac
+.DS_Store
+# Windows
+Thumbs.db
+# Visual Studio Code
+.vscode/
+# Logs
+*.log
