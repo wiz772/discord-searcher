@@ -1,14 +1,14 @@
 const filesUtils = require("../utils/files");
 
-const messages_batch = new Map();
+const MESSAGES_BATCH = new Map();
 const MESSAGES_BATCH_SIZE = 100;
 
 
 function addToMessage(message) {
     if (!message || !message.message_id|| !message.user_id) return;
-    if (messages_batch.has(message.id)) return;
+    if (MESSAGES_BATCH.has(message.id)) return;
 
-    messages_batch.set(message.message_id, {
+    MESSAGES_BATCH.set(message.message_id, {
         message_id: message.message_id,
         user_id: message.user_id,
         guild_id: message.guild_id,
@@ -18,9 +18,9 @@ function addToMessage(message) {
     });
 
 
-    if (messages_batch.size >= MESSAGES_BATCH_SIZE) {
-        const batchToWrite = Array.from(messages_batch.values());
-        messages_batch.clear();
+    if (MESSAGES_BATCH.size >= MESSAGES_BATCH_SIZE) {
+        const batchToWrite = Array.from(MESSAGES_BATCH.values());
+        MESSAGES_BATCH.clear();
         const fileName = `messages_${Date.now()}.json`;
         filesUtils.writeFile("../scrapped_data/messages", fileName, batchToWrite)
             .then(() => console.log(`[BATCH] ${fileName} écrit !`))
@@ -30,11 +30,11 @@ function addToMessage(message) {
 
 
 function flushChannels(client) {
-    const channels_batch = [];
+    const channelsBatch = [];
 
     client.guilds.cache.forEach(guild => {
         guild.channels.cache.forEach(channel => {
-            channels_batch.push({
+            channelsBatch.push({
                 channel_id: channel.id,
                 guild_id: guild.id,
                 name: channel.name,
@@ -44,16 +44,16 @@ function flushChannels(client) {
     });
 
     const fileName = `channels_${Date.now()}.json`;
-    filesUtils.writeFile("../scrapped_data/channels", fileName, channels_batch)
+    filesUtils.writeFile("../scrapped_data/channels", fileName, channelsBatch)
         .then(() => console.log(`[FLUSH] ${fileName} écrit !`))
         .catch(err => console.error(err));
-}
+};
 
 function flushGuilds(client) {
-    const guilds_batch = [];
+    const guildsBatch = [];
 
     client.guilds.cache.forEach(guild => {
-        guilds_batch.push({
+        guildsBatch.push({
             guild_id: guild.id,
             name: guild.name,
             icon_url: guild.iconURL(),
@@ -63,7 +63,7 @@ function flushGuilds(client) {
     });
 
     const fileName = `guilds_${Date.now()}.json`;
-    filesUtils.writeFile("../scrapped_data/guilds", fileName, guilds_batch)
+    filesUtils.writeFile("../scrapped_data/guilds", fileName, guildsBatch)
         .then(() => console.log(`[FLUSH] ${fileName} écrit !`))
         .catch(err => console.error(err));
 }

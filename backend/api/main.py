@@ -8,7 +8,7 @@ from psycopg2 import OperationalError
 from dotenv import load_dotenv
 import os
 import requests
-
+import re
 
 app = FastAPI(title="Discord Messages Searcher")
 
@@ -73,11 +73,17 @@ class UserInfo(BaseModel):
     avatar: Optional[str]
     id: str
 
+
+def validate_discord_id(value: str, field_name: str = "ID"):
+    if not re.fullmatch(r"\d{17,20}", value):
+        raise HTTPException(status_code=400, detail=f"Invalid {field_name}")
+
 # ----------------------
 # Endpoint 1 : info d'un utilisateur Discord via l'API Discord
 # ----------------------
 @app.get("/discord/user/{user_id}", response_model=UserInfo)
 def get_discord_user(user_id: str):
+    validate_discord_id(user_id, "user_id")
     if not DISCORD_BOT_TOKEN:
         raise HTTPException(status_code=500, detail="Discord bot token not configured")
     
@@ -107,6 +113,7 @@ def get_discord_user(user_id: str):
 # ----------------------
 @app.get("/user/{user_id}/guilds", response_model=List[Guild])
 def get_user_guilds(user_id: str):
+    validate_discord_id(user_id, "user_id")
     conn = get_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="Cannot connect to DB")
@@ -139,6 +146,7 @@ def get_user_guilds(user_id: str):
 # ----------------------
 @app.get("/user/{user_id}/guild/{guild_id}/channels", response_model=List[Channel])
 def get_user_channels(user_id: str, guild_id: str):
+    validate_discord_id(user_id, "user_id")
     conn = get_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="Cannot connect to DB")
@@ -170,6 +178,7 @@ def get_user_channels(user_id: str, guild_id: str):
 # ----------------------
 @app.get("/user/{user_id}/channel/{channel_id}/messages", response_model=List[Message])
 def get_user_messages(user_id: str, channel_id: str):
+    validate_discord_id(user_id, "user_id")
     conn = get_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="Cannot connect to DB")

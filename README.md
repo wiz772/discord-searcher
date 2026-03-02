@@ -6,8 +6,6 @@ Discord Searcher is a project to explore and search messages from Discord users 
 
 > ⚠️ **Important:** This project is for **educational purposes only**. Use at your own risk. The author assumes **no responsibility** for misuse or violation of Discord's terms of service.
 
-
-
 ---
 
 ## Features
@@ -110,7 +108,6 @@ pip install -r requirements.txt
 - Using Discord user tokens or bot tokens for scraping is **at your own risk**. Misuse may violate Discord's Terms of Service.
 - The author assumes **no responsibility** for any issues caused by this project.
 - This project is **intended strictly for educational purposes**.
-
 ---
 
 ## License
